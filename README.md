@@ -14,9 +14,10 @@
 1️⃣ L'objectif est de deviner le prix de biens immobiliers grâce à de nombreuses variables
 2️⃣ la variable cible est "SalePrice" qui est donc le prix du bien
 3️⃣C'est un problème de regression
+
+
             🧠 Les principaux types de problèmes ML
             1️⃣ Régression
-
             But : prédire une valeur continue.
 
             Exemple concret : prédire le prix d’une maison (House Prices), la température demain, le salaire d’un employé.
