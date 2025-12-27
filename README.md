@@ -70,5 +70,75 @@
             Exemple concret : PCA pour visualiser des données en 2D, ou extraire des composants principaux.
 
             Variable cible : aucune (souvent non supervisé).
-4️⃣ 
-5️⃣
+4️⃣ Toutes les informations concernant les biens
+5️⃣Rien n'est interdit en gros
+
+
+
+
+
+
+🧭 ÉTAPE 2 — EXPLORATION DES DONNÉES (EDA)
+
+L’objectif ici est de comprendre tes données concrètement, avant tout nettoyage ou modélisation.
+Reste attentif : pas de sélection de features ni de modélisation à cette étape.
+
+1️⃣ Charger les fichiers
+
+Tu as à disposition :
+
+train.csv → données d’entraînement + cible
+
+test.csv → données sans la cible
+
+sample_submission.csv → format de soumission
+
+data_description.txt → description des variables
+
+À faire :
+
+Charger train.csv et test.csv dans ton notebook.
+
+Vérifier la taille des datasets : combien de lignes et colonnes.
+
+Vérifier le type de chaque variable : numérique, catégorielle, date, texte, etc.
+
+2️⃣ Comprendre les variables
+
+À partir de data_description.txt :
+
+Lire la signification de chaque colonne
+
+Identifier :
+
+Variables numériques
+
+Variables catégorielles
+
+Variables ordinales (qualité, condition…)
+
+Astuce prof : prends des notes sur papier ou un document, ça t’aidera pour l’étape suivante.
+
+3️⃣ Aperçu rapide des données
+
+Pour chaque colonne du train :
+
+Voir les valeurs manquantes
+
+Voir quelques exemples de valeurs (head, tail)
+
+Visualiser rapidement les distributions (histogrammes ou counts)
+
+Objectif : détecter tout problème évident (NaN, valeurs aberrantes, catégories étranges).
+
+4️⃣ Vérifier la variable cible (SalePrice)
+
+Distribution générale : histogramme, boxplot
+
+Détecter si elle est très asymétrique → pourrait nécessiter transformation plus tard
+
+5️⃣ Comparer train et test
+
+Vérifier que les colonnes sont identiques
+
+Vérifier les types et catégories : certaines catégories peuvent exister dans test mais pas dans train
