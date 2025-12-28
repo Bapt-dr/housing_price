@@ -76,7 +76,7 @@
 
 
 
-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 🧭 ÉTAPE 2 — EXPLORATION DES DONNÉES (EDA)
@@ -143,3 +143,135 @@ Détecter si elle est très asymétrique → pourrait nécessiter transformation
 Vérifier que les colonnes sont identiques
 
 Vérifier les types et catégories : certaines catégories peuvent exister dans test mais pas dans train
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+🧭 ÉTAPE 3 — NETTOYAGE ET PRÉPARATION DES DONNÉES
+
+Objectif : préparer les données brutes pour qu’un modèle ML puisse les utiliser correctement.
+C’est l’étape la plus importante pour éviter les erreurs et améliorer les performances.
+
+On va suivre une méthode débutant claire, étape par étape.
+
+1️⃣ Identifier les colonnes à nettoyer
+À regarder :
+
+Valeurs manquantes → train.isnull().sum()
+
+Colonnes avec trop de NaN → décider si on supprime ou remplace
+
+Valeurs aberrantes → vérifier les outliers pour les variables numériques
+
+2️⃣ Séparer les types de colonnes
+
+Pour un ML correct, il faut traiter différemment :
+
+Type	Comment le traiter
+Numérique	Remplir les NaN avec la médiane ou moyenne
+Catégorielle	Remplir les NaN avec la valeur la plus fréquente
+Ordinale (ex : qualité)	Option : garder ordre ou one-hot (débutant → one-hot simple)
+
+Prof : toujours séparer les types de variables, ça évite les erreurs de pipeline.
+
+Pour les colonnes numériques: 
+    utiliser simpleImputer(strategy="median")
+    num_transformer.fit(X_train_num)
+    num_transformer.transform(X_train_num)
+
+Pour les colonnes catégoricielles:
+    cat_transformer = Pipeline(steps=[("imputer", SimpleImputer(strategy="most_frequent")), ("onehot", OneHotEncoder(handle_unknown='ignore'))])
+    cat_transformer.fit(X_train_cat)
+    cat_transformer.transform(X_train_cat)
+
+3️⃣ Encodage des variables catégorielles
+
+Pourquoi : les modèles ML ne comprennent que des nombres
+
+Méthode débutant : One-Hot Encoding
+
+Chaque catégorie devient une colonne binaire
+
+Exemple : Neighborhood → Neighborhood_CollgCr, Neighborhood_Veenker, …
+
+Option plus avancée (pas pour débutant) : Label Encoding ou Ordinal Encoding
+
+4️⃣ Vérifier les valeurs extrêmes (outliers)
+
+Pour les features numériques importantes (GrLivArea, TotalBsmtSF, etc.)
+
+Option débutant : ne rien supprimer mais être conscient
+
+Option avancée : filtrer ou transformer (log, sqrt)
+
+5️⃣ Préparer la cible
+
+Si tu veux réduire l’asymétrie, tu peux appliquer log(SalePrice)
+
+Si non, garder la valeur originale pour le premier modèle baseline
+
+6️⃣ Construire le pipeline
+
+Pour un projet propre :
+
+Imputation des valeurs manquantes
+
+Encodage des variables catégorielles
+
+Standardisation / Normalisation (optionnelle pour Linear Regression)
+
+Modélisation
+
+Prof : le pipeline garantit que tu appliques exactement le même traitement au train et test → très important pour Kaggle.
+
+
+🔑 Résumé PROF
+
+Étape 3 = préparer le dataset pour qu’il soit propre, homogène et compréhensible par le modèle.
+Points clés :
+
+Gérer les NaN
+
+Encoder les catégorielles
+
+Vérifier outliers
+
+Décider transformation de la cible (log ou non)
+
+Construire un pipeline propre
+
+
+
+
+Différence predict/fit
+
+# 📝 Pipeline Scikit-learn : Rappel des étapes
+
+Dans un pipeline sklearn, on a généralement deux types d’étapes :  
+
+1. **Préprocesseur (`preprocessor`)** : transformation des features (ex : imputation des NaN, encodage des catégories, normalisation…)  
+2. **Modèle ML (`regressor`)** : apprentissage des relations entre features et cible.
+
+---
+
+## 🔹 Tableau résumé
+
+| Appel | Préprocesseur (`preprocessor`) | Modèle ML (`regressor`) |
+|-------|-------------------------------|------------------------|
+| `fit(X, y)` | `fit_transform(X)` → apprend les règles de transformation sur X (ex : médiane, valeur la plus fréquente, catégories) et transforme X | `fit(X_transformed, y)` → apprend les coefficients ou paramètres du modèle sur les données transformées |
+| `predict(X)` | `transform(X)` → applique exactement les mêmes transformations apprises sur le train | `predict(X_transformed)` → applique la formule du modèle pour générer les prédictions |
+
+---
+
+## 🔹 Points clés
+
+- Le **préprocesseur n’utilise jamais y**.  
+- Les **NaN du test sont remplis avec les statistiques calculées sur le train**.  
+- Les **catégories inconnues** sont gérées grâce à `OneHotEncoder(handle_unknown='ignore')`.  
+- Le pipeline garantit **cohérence et absence de fuite de données** entre train et test.  
+
+---
+
+💡 **Astuce** : Cette structure permet de **préparer, entraîner et prédire** avec un seul objet `Pipeline`, ce qui rend le code plus clair et sûr.

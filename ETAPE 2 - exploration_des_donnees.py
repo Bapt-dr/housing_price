@@ -33,10 +33,9 @@ print(train['SalePrice'].describe())
 
 # Histogramme
 sns.histplot(train['SalePrice'], kde=True)
-sns.histplot(train['LotArea'], kde=True)
+
 plt.show()
 
 # Boxplot pour voir les outliers
 sns.boxplot(x=train['SalePrice'])
-sns.boxplot(x=train['LotArea'])
 plt.show()
